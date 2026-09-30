@@ -1,0 +1,2047 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "FlexPoint API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "/core-api"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/login-merchant": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Returns Bearer token which then can be used to call merchant api methods.\r\n",
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Return list of customers. Metadata filter can be used in such query param (metadata[your_var]=var1234)",
+        "description": "Response headers: record-count",
+        "operationId": "GetCustomers",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "customer_id_parent",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "added_childs",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "name": "external_uri",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetCustomerResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Create customer record.",
+        "operationId": "CreateCustomer",
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Customers/{id}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Return customer record by ID.",
+        "operationId": "GetCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Update customer record.",
+        "operationId": "UpdateCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Customers/{id}/contacts": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Return customer contacts by Customer Id.",
+        "operationId": "GetCustomerContacts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetCustomerContactResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Create customer contact.",
+        "operationId": "CreateCustomerContact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerContactRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerContactRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCustomerContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerContactResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Customers/{id}/contacts/{contact_id}": {
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Update customer contact.",
+        "operationId": "UpdateCustomerContact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerContactRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerContactRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutCustomerContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerContactResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Update customer contact.",
+        "operationId": "DeleteCustomerContact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Deposits": {
+      "get": {
+        "tags": [
+          "Deposits"
+        ],
+        "summary": "Return list of deposits.",
+        "description": "Response headers: record-count",
+        "operationId": "GetDeposits",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetDepositResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Deposits/{id}": {
+      "get": {
+        "tags": [
+          "Deposits"
+        ],
+        "summary": "Return deposit details by ID.",
+        "operationId": "GetDeposit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDepositDetailsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Invoices": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Return list of invoices. Metadata filter can be used in such query param (metadata[your_var]=var1234)",
+        "description": "Response headers: record-count, total-amount, total-balance",
+        "operationId": "GetInvoices",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "name": "external_uri",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetInvoiceResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Create invoice record.",
+        "operationId": "CreateInvoice",
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInvoiceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Invoices/{id}": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Update invoice record (Allowed Statuses:New, Posted, Void ).",
+        "operationId": "UpdateInvoice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoice record",
+        "operationId": "GetInvoice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInvoiceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Invoices/{id}/details": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoice details record",
+        "operationId": "GetInvoiceDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInvoiceDetailsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Invoices/{id}/items": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Return list of invoice items by invoice Id.",
+        "operationId": "GetInvoiceItems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetInvoiceItemResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Create invoice item record.",
+        "operationId": "CreateInvoiceItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceItemRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceItemRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInvoiceItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInvoiceItemResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/merchant/v1/Invoices/{id}/items/{invoice_item_id}": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Update invoice item record.",
+        "operationId": "UpdateInvoiceItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "invoice_item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceItemRequest"
+              }
+            },
+            "text/json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceItemRequest"
+              }
+            },
+            "application/*+json; x-api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/PutInvoiceItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInvoiceItemResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Delete invoice item record.",
+        "operationId": "DeleteInvoiceItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "invoice_item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthRequest": {
+        "required": [
+          "secret"
+        ],
+        "type": "object",
+        "properties": {
+          "secret": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DepositItemResponse": {
+        "type": "object",
+        "properties": {
+          "invoiceUri": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "invoiceNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "paymentAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "feeAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "refundAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "achChargeFailureRefund": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetCustomerContactResponse": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "fname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "isPrimary": {
+            "type": "boolean"
+          },
+          "contactId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetCustomerResponse": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "city": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "state": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "webSite": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "metadata": {
+            "type": "null"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDepositDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "adminFees": {
+            "type": "number",
+            "format": "double"
+          },
+          "payout": {
+            "$ref": "#/components/schemas/PayoutResponse"
+          },
+          "items": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/DepositItemResponse"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDepositResponse": {
+        "type": "object",
+        "properties": {
+          "payoutId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "datePaid": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetInvoiceDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "invoice": {
+            "$ref": "#/components/schemas/GetInvoiceResponse"
+          },
+          "lineItems": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GetInvoiceItemResponse"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetInvoiceItemResponse": {
+        "type": "object",
+        "properties": {
+          "invoiceItemId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "partNum": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "qty": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "description": "line item total discount (not unit discount)",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetInvoiceResponse": {
+        "type": "object",
+        "properties": {
+          "invoiceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InvoiceStatus"
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "dtInvoice": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "dtDue": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "dtPosted": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "customerMessage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "docNum": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "poNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "contract": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2City": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2State": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "autoProcess": {
+            "type": "boolean",
+            "description": "the invoice is set to be processed automatically"
+          },
+          "autoProcessDisabled": {
+            "type": "boolean",
+            "description": "the auto processing is disabled (e.g. due to previous errors, or manually by user)"
+          },
+          "invoiceAmount": {
+            "type": "number",
+            "description": "total invoice amount including items and tax",
+            "format": "double"
+          },
+          "invoiceItemsAmount": {
+            "type": "number",
+            "description": "items amount without tax",
+            "format": "double"
+          },
+          "creditAmount": {
+            "type": "number",
+            "description": "credit amount applied to the invoice",
+            "format": "double"
+          },
+          "taxAmount": {
+            "type": "number",
+            "description": "tax amount",
+            "format": "double"
+          },
+          "paymentsProcessedAmount": {
+            "type": "number",
+            "description": "FlexPoint processed total payments amount",
+            "format": "double"
+          },
+          "paymentsReceivedAmount": {
+            "type": "number",
+            "description": "total payments received amount (including non-FlexPoint processed)",
+            "format": "double"
+          },
+          "openBalanceAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "lineItemsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "metadata": {
+            "type": "null"
+          },
+          "paymentUrl": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceStatus": {
+        "enum": [
+          "Draft",
+          "Posted",
+          "Paid",
+          "Processing",
+          "Void"
+        ],
+        "type": "string"
+      },
+      "PayoutResponse": {
+        "type": "object",
+        "properties": {
+          "paidAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "processorPayoutId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "payoutBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "payoutAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostCustomerContactRequest": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "fname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "isPrimary": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostCustomerRequest": {
+        "required": [
+          "email",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "city": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "state": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "webSite": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "metadata": {
+            "type": "null",
+            "description": "User defined object",
+            "example": {
+              "var1": "variable1",
+              "var2": "variable2"
+            }
+          },
+          "fname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostInvoiceItemRequest": {
+        "required": [
+          "description",
+          "discountAmount",
+          "partNum",
+          "qty",
+          "unitPrice"
+        ],
+        "type": "object",
+        "properties": {
+          "partNum": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "qty": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostInvoiceRequest": {
+        "required": [
+          "customerId",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/InvoiceStatus"
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "dtInvoice": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "dtDue": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "customerMessage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "doc_num": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "poNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "contract": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2City": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2State": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "autoProcess": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "null"
+          },
+          "customerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lineItems": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PostInvoiceItemRequest"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PutCustomerContactRequest": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "fname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lname": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "isPrimary": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PutCustomerRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "city": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "state": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "webSite": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "metadata": {
+            "type": "null",
+            "description": "User defined object",
+            "example": {
+              "var1": "variable1",
+              "var2": "variable2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PutInvoiceItemRequest": {
+        "required": [
+          "description",
+          "discountAmount",
+          "partNum",
+          "qty",
+          "unitPrice"
+        ],
+        "type": "object",
+        "properties": {
+          "partNum": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "qty": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PutInvoiceRequest": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/InvoiceStatus"
+          },
+          "externalUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "dtInvoice": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "dtDue": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "customerMessage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "doc_num": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "poNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "contract": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Country": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Addr": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2City": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2State": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Zip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bill2Email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "autoProcess": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "null"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Please enter a valid token",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Customers"
+    },
+    {
+      "name": "Deposits"
+    },
+    {
+      "name": "Invoices"
+    }
+  ]
+}
