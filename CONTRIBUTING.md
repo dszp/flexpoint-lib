@@ -52,10 +52,19 @@ Keep the `record-count` check, the duplicate-id check, and the runaway guard.
 
 ## Releasing
 
-1. Bump `version` in `package.json`.
-2. Move the Unreleased section of `CHANGELOG.md` under the new version.
-3. Tag `vX.Y.Z`, push, and publish a GitHub Release.
+Every version on npm has a matching `vX.Y.Z` tag and GitHub Release. Publishing happens only in
+CI: a published Release triggers `release-publish.yml`, which publishes to npm with provenance
+through OIDC trusted publishing.
 
-The `release-publish` workflow publishes to npm with provenance through OIDC trusted publishing.
-Publish the first version of a new package by hand (`pnpm publish --access public`), because npm
-can attach a trusted publisher only to a package that already exists.
+1. Bump `version` in `package.json` (`npm pkg set version=X.Y.Z`).
+2. Move the Unreleased section of `CHANGELOG.md` under the new version.
+3. Commit, and push `main`.
+4. Tag the release commit `vX.Y.Z`, and push the tag.
+5. Create a GitHub Release from that tag. For a prerelease version such as `X.Y.Z-rc.1`, mark it
+   as a prerelease; the workflow publishes it under the `next` dist-tag.
+6. Check that the workflow run succeeded and that `npm view @dszp/flexpoint-lib versions` lists
+   the new version.
+
+If npm already has the tagged version, the workflow finishes without publishing. The first
+version of a new package was published by hand, because npm attaches a trusted publisher only to
+a package that already exists.

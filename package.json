@@ -1,6 +1,6 @@
 {
   "name": "@dszp/flexpoint-lib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Portable, Node-free, read-only client for the FlexPoint merchant API: automatic token login and refresh, lossless int64 ids, and complete-list walkers checked against record-count. Runs unchanged in a Cloudflare Worker, Node, or the browser.",
   "type": "module",
   "license": "MIT",
